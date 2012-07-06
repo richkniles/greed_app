@@ -1,9 +1,12 @@
 GreedApp::Application.routes.draw do
-  get "static_pages/home"
+  get "players/new"
 
-  get "static_pages/help"
-
-  get "static_pages/about"
+  root              to: 'static_pages#home'
+  match '/rules',   to: "static_pages#rules"
+  match '/about',   to: "static_pages#about"
+  match '/contact', to: "static_pages#contact"
+  match '/',        to: 'static_pages#home'
+  match '/signup',  to: "players#new"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

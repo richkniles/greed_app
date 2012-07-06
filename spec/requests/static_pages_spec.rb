@@ -2,44 +2,39 @@ require 'spec_helper'
 
 describe "Static pages" do
 
-  describe "Home page" do
-
-    it "should have the content 'Welcome to Greed'" do
-      visit '/static_pages/home'
-      page.should have_content('Welcome to Greed')
-    end
-    
-    it "should have the base title" do
-      visit '/static_pages/home'
-      page.should have_selector('title', text: "Greed - the game of strategy")     
-    end 
-  end
+  subject { page }
   
-  describe "Help page" do
-
-    it "should have the content 'Help Playing Greed'" do
-      visit '/static_pages/help'
-      page.should have_content('Help Playing Greed')
-    end
+  describe "Home page" do
+    before { visit root_path }
     
-    it "should have the title 'Help'" do
-      visit '/static_pages/help'
-      page.should have_selector('title', text: "Greed - the game of strategy | Help")     
-    end 
+    it { should have_content('The dice game of strategy') }
+    
+    it { should have_selector('title', text: "Greed - the game of strategy") }
+  
+  describe "Rules page" do
+    before { visit rules_path }
+    
+    it { should have_content('Greed Game Rules') }
+    
+    it { should have_selector('title', text: "Greed - the game of strategy | Rules") }    
   end
   
   describe "About page" do
-
-    it "should have the content 'About Greed'" do
-      visit '/static_pages/about'
-      page.should have_content('About Greed')
-    end
+    before { visit about_path }
     
-    it "should have the title 'About'" do
-      visit '/static_pages/about'
-      page.should have_selector('title', text: "Greed - the game of strategy | About")     
-    end 
+    it { should have_content('About Greed') }
+    
+    it { should have_selector('title', text: "Greed - the game of strategy | About") }    
   end
   
+  describe "Contact page" do
+    before { visit contact_path }
+    
+    it { should have_selector('h1', text: 'Contact') }
+    
+    it { should have_selector('title',
+                    text: 'Greed - the game of strategy | Contact') }
+    end
+  end
   
 end
