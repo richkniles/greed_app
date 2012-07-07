@@ -6,6 +6,8 @@ module SessionsHelper
   end
   
   def sign_out
+    current_player.last_active = nil
+    current_player.save validate: false
     self.current_player = nil
     cookies.delete(:remember_token)
   end
@@ -20,6 +22,13 @@ module SessionsHelper
 
   def current_player
    @current_player ||= Player.find_by_remember_token(cookies[:remember_token])
+  end
+  
+  def tweek_current_player
+    if (signed_in?)
+      current_player.last_active = Time.now
+      current_player.save validate: false
+    end
   end
 
 end

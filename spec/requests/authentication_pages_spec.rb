@@ -46,6 +46,40 @@ describe "Authentication" do
         end
 
       end
+      
+      describe "keeping last active up to date" do
+        let(:player) { FactoryGirl.create(:player) }
+        let!(:time) { Time.zone.now }
+        before do
+          fill_in "Email",    with: player.email
+          fill_in "Password", with: player.password
+          click_button "Sign in"
+        end
+
+        it "should update last_active when visit the root path" do
+          visit root_path          
+          current_player = Player.find_by_email(player.email)
+          current_player.last_active.should_not be_nil
+          current_player.last_active.should >= time
+        end
+        it "should update last_active when visit the about path" do
+          visit about_path          
+          current_player = Player.find_by_email(player.email)
+          current_player.last_active.should_not be_nil
+          current_player.last_active.should >= time
+        end
+        it "should update last_active when visit the rules path" do
+          visit rules_path          
+          current_player = Player.find_by_email(player.email)
+          current_player.last_active.should_not be_nil
+          current_player.last_active.should >= time
+        end
+        it "should nil out last_active on sign_out" do
+          click_link "Sign out"
+          current_player = Player.find_by_email(player.email)
+          current_player.last_active.should be_nil
+        end
+      end
 
     end 
 end
