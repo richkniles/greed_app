@@ -14,6 +14,7 @@ describe Player do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:remember_token)}
   
   it { should be_valid }
   
@@ -92,6 +93,11 @@ describe Player do
       it { should_not == player_for_invalid_password }
       specify { player_for_invalid_password.should be_false }
     end
+  end
+  
+  describe "remember token" do
+    before { player.save }
+    its(:remember_token) { should_not be_blank }
   end
   
 end

@@ -1,5 +1,8 @@
 GreedApp::Application.routes.draw do
-  get "players/new"
+  resources :players
+  resources :sessions, only: [:new, :create, :destroy]
+  
+  
 
   root              to: 'static_pages#home'
   match '/rules',   to: "static_pages#rules"
@@ -7,6 +10,8 @@ GreedApp::Application.routes.draw do
   match '/contact', to: "static_pages#contact"
   match '/',        to: 'static_pages#home'
   match '/signup',  to: "players#new"
+  match '/signin',  to: "sessions#new"
+  match '/signout', to: "sessions#destroy", via: :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
