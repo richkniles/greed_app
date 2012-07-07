@@ -1,0 +1,15 @@
+<% provide(:title, "Currently Active Players")%>
+
+<div class = "container">
+<h1>Currently Active Players</h1>
+
+<h2>Click on someone to play Greed!</h2>
+<ul class='players'>
+	<% @players.each do |player| %>
+		<li>
+			<a href='/players/<%= player.id %>'><%= gravatar_for player, size: 52%></a>
+			<%= link_to player.player_name, player %>
+		</li>
+	<% end %>
+</ul>
+</div>

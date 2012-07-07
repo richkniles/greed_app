@@ -1,6 +1,7 @@
 
 class PlayersController < ApplicationController
   
+  before_filter :signed_in_user, only: [:index]
   
   def show
     @player = Player.find(params[:id])
@@ -20,4 +21,16 @@ class PlayersController < ApplicationController
       render 'new'
     end
   end
+  
+  def index
+    @players = Player.where("last_active >= ? and id <> ?", 1.minute.ago, current_player.id)
+  end
+  
+  private
+    def signed_in_user
+      unless signed_in?
+        redirect_to signin_path, notice: "Please sign in."
+      end
+    end
+  
 end

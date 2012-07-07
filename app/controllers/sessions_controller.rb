@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     player = Player.find_by_email(params[:email])
     if player && player.authenticate(params[:password])
       sign_in player
-      redirect_to player
+      redirect_to players_path
     else
       flash.now[:error] = 'Invalid email/password combination' # Not quite right!
       render 'new'
