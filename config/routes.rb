@@ -1,7 +1,8 @@
 GreedApp::Application.routes.draw do
+
   resources :players
   resources :sessions, only: [:new, :create, :destroy]
-  
+  resources :games
   
 
   root              to: 'static_pages#home'

@@ -7,8 +7,11 @@
 <ul class='players'>
 	<% @players.each do |player| %>
 		<li>
-			<a href='/players/<%= player.id %>'><%= gravatar_for player, size: 52%></a>
-			<%= link_to player.player_name, player %>
+			<%= form_tag(games_path) do  %>
+				<%= hidden_field_tag :opponent, player.id %>
+				<%= image_submit_tag gravatar_url_for(player), id: player.player_name %>
+				<%= player.player_name %>
+			<% end %>
 		</li>
 	<% end %>
 </ul>

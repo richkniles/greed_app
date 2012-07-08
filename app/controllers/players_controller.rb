@@ -23,6 +23,7 @@ class PlayersController < ApplicationController
   end
   
   def index
+    @current_player = current_player
     @players = Player.where("last_active >= ? and id <> ?", 1.minute.ago, current_player.id)
   end
   
