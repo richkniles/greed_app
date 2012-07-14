@@ -1,13 +1,13 @@
 
 class GamesController < ApplicationController
   
-  def new
+  def new  # not used
     @player1 = current_player
     @player2 = params[:opponent]
   end
   
   def create
-    @game = Game.new(player1: current_player, player2: params[:opponent])
+    @game = Game.new(player1: current_player, player2: params[:opponent], state: Game::WAITING)
     @opponent_name = Player.find(@game.player2).player_name
     if (@game.save)
       render 'show'
