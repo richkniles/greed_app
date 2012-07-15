@@ -21,7 +21,7 @@ class Player < ActiveRecord::Base
 
   def send_message_to(player, message, params = {})
     
-    message = "Play greed with #{self.player_name}?" if message == "ask"
+    message = "Play Greed with #{self.player_name}?" if message == "ask"
     message += " #{params[:game_id]}" if message == "join"
     
     Message.create(from_player: self.id, to_player: player.id, message: message)

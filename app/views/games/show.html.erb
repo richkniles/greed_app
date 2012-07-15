@@ -1,3 +1,7 @@
-<% provide(:title, "Play Greed with #{@player2.player_name}")%>
-<h1>Play Greed with <%= @player2.player_name %></h1>
-<h2>Waiting for <%= @player2.player_name %> to join...</h2>
+<% provide(:title, "Game with #{@opponent}")%>
+<h1><%= "Game with #{@opponent}" %></h1>
+<% if @game.state == Game::ABANDONED %>
+	<div class='abandoned'>
+		Abandoned
+	</div>
+<% end %>

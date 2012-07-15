@@ -1,3 +1,12 @@
-<% provide(:title, "Play Greed with #{@player2.player_name}")%>
-<h1>Play Greed with <%= @player2.player_name %></h1>
-<h2>Waiting for <%= @player2.player_name %> to join...</h2>
+<% if (@player2)%>
+	<% provide(:title, "Play Greed with #{@player2.player_name}")%>
+	<h1>Play Greed with <%= @player2.player_name %></h1>
+	<h2>Waiting for <%= @player2.player_name %> to join...</h2>
+<% end %>
+<%= form_for @game do |f| %>
+  	<%= f.label :player1, "Player 1" %>
+	<%= f.text_field :player1 %>
+	<%= f.label :player2, "Player 2" %>
+	<%= f.text_field :player2 %>
+	<%= f.submit "Submit" %>
+<% end -%>
