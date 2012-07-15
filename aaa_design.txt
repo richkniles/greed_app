@@ -1,0 +1,33 @@
+Messages
+
+The message model will be used to send messages between users to notify their browser to react.  The messages will be picked up by a javascript message_listener running every second or so.  The messages to be used in Greed will be:
+
+1. ask another player to join in a game
+2. answer yes or no to 1.
+3. instruct another player's browser to join a game
+3. once a game is going, to notify the other player that a move was made
+
+The message queue will be implemented thru the Message model with associated database table messages.  Each row in the message table will have from_player_id, to_player_id and the message code.  The three types of messages will then be;
+
+1. <player_1_id> <player_2_id> "Play greed with <player_1_name>?"
+2. <player_1_id> <player_2_id> "yes"
+   <player_1_id> <player_2_id> "no"
+3. <player_1_id> <player_2_id> "join <game_id>"
+4. <player_1_id> <player_2_id> "moved"
+
+The sequence of actions will be:
+
+Players 1 and 2 are signed_in and active (meaning they've done something with their browser in the last 5 seconds)
+Player 1 (Rich) clicks on player 2 (Joey) in his Players view.  This creates a message in the messages table:
+	<player_1_id> <player_2_id> "Play greed with Rich"
+and then renders the waiting view that says "Waiting for Joey to reply"
+
+Meanwhile Joey's browser is checking the message queue by querying with ajax to the messages/index path which will respond with "nil" until there is a message.  The message_poller javascript that does this, will then receive the above message in json, and parse it into the two ids and the message.  It will then react by putting up a confirm dialog with the question "Play greed with Rich" which it parsed out of the json.  Joey will respond with ok or cancel, and the javascript will then do another ajax request to messages/create to put the yes or no answer into the message queue. 
+
+Rich's browser, meanwhile, is running it's message_poller too, and when Joey's message is detected, it either renders the Players view (if Joey said "no") with a Flash[error] = "Joey refused" or it  
+creates a new game with Rich and Joey as players, and then sends a final message "join" to Joey. After which it renders the game.
+
+When Joey's browser picks up the join message, it parses the game id out of the message, and redirects to games/id/show
+
+Then it's Rich's move.  He moves by clicking on the move or pass buttons on his view of the game, and with each one, a "moved" message is sent to Joey.  When Joey's browser receives the moved message it refreshes the game/id/show page.  The turn automatically switches to Joey when the game's state switches from 1s_turn to 2s_turn, which happens when Rich pushes the pass button, or he fails to score.
+	

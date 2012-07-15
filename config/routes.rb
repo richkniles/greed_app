@@ -3,7 +3,7 @@ GreedApp::Application.routes.draw do
   resources :players
   resources :sessions, only: [:new, :create, :destroy]
   resources :games
-  
+  resources :messages, only: [:index, :create]
 
   root              to: 'static_pages#home'
   match '/rules',   to: "static_pages#rules"

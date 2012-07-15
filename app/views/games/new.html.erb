@@ -1,2 +1,3 @@
-<h1>Games#new</h1>
-<p>Find me in app/views/games/new.html.erb</p>
+<% provide(:title, "Play Greed with #{@player2.player_name}")%>
+<h1>Play Greed with <%= @player2.player_name %></h1>
+<h2>Waiting for <%= @player2.player_name %> to join...</h2>

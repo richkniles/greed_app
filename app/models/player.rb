@@ -17,6 +17,18 @@ class Player < ActiveRecord::Base
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
 
+
+
+  def send_message_to(player, message, params = {})
+    
+    message = "Play greed with #{self.player_name}?" if message == "ask"
+    message += " #{params[:game_id]}" if message == "join"
+    
+    Message.create(from_player: self.id, to_player: player.id, message: message)
+  end
+  
+  
+    
   private
 
     def create_remember_token

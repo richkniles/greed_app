@@ -1,9 +1,10 @@
 
 class GamesController < ApplicationController
   
-  def new  # not used
+  def new 
     @player1 = current_player
-    @player2 = params[:opponent]
+    @player2 = Player.find params[:opponent]
+    @player1.send_message_to(@player2, "ask")
   end
   
   def create

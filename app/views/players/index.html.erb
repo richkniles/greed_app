@@ -7,7 +7,7 @@
 <ul class='players'>
 	<% @players.each do |player| %>
 		<li>
-			<%= form_tag(games_path) do  %>
+			<%= form_tag new_game_path, method: 'get' do  %>
 				<%= hidden_field_tag :opponent, player.id %>
 				<%= image_submit_tag gravatar_url_for(player), id: player.player_name %>
 				<%= player.player_name %>
