@@ -12,7 +12,7 @@ class GamesController < ApplicationController
   
   def create
     player2_id = params[:game] ? params[:game][:player2] : params[:player2]
-    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING)
+    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::PLAYER1_TURN)
     @opponent_name = Player.find(@game.player2).player_name
     if (@game.save)
       render json: @game

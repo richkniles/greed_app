@@ -30,4 +30,79 @@ creates a new game with Rich and Joey as players, and then sends a final message
 When Joey's browser picks up the join message, it parses the game id out of the message, and redirects to games/id/show
 
 Then it's Rich's move.  He moves by clicking on the move or pass buttons on his view of the game, and with each one, a "moved" message is sent to Joey.  When Joey's browser receives the moved message it refreshes the game/id/show page.  The turn automatically switches to Joey when the game's state switches from 1s_turn to 2s_turn, which happens when Rich pushes the pass button, or he fails to score.
-	
+
+
+Playing the game
+
+Briefly, Greed players take turns rolling six dice repeatedly until they decide to stop or roll a no-score.  The game will be modeled with a game table, a turn table and a roll table.  A Game has many player1 turns and player2 turns and a turn has many rolls.  A roll has a score based only on the values of the 6 dice, and a turn has a score that's the sum of the scores for all its rolls, unless the last roll scores 0. A game also has a player1 and a player 2 as well as a state, which is one of:
+	PLAYER1_TURN
+	PLAYER2_TURN
+	WAITING
+	ABANDONED
+The game view displays the current turn, which shows the turn score, and the current roll (6 dice and its score) along with a "Roll" button and a "Pass" button, unless the score of the roll is 0, in which case, there is only an "Oh well" button. When the user clicks the Roll button a new roll is created and the view updates. When the "Oh well" or "Pass" button is pressed, the game state changes to the other player, and the view updates.
+
+When a user's score exceeds 3000, the opposing player gets one more turn, and at the end of that turn, the game is over.  The player with the highest score wins.
+
+Most of the logic for game play will be in the Game class. It will have a roll method, which will produce another roll for the current turn, and a turnover method that changes the state to the other player's turn. In addition it will have a score method that will take 1 or 2 as a parameter, and produce the game score for that player.
+
+The turn will have a roll method as well, which is called by the game's roll method, and it will have a score method.
+
+A roll will have a roll method which is called by the turn's roll method.  It will have 6 dice. And it will have a score method.  
+
+A die will have a roll method, which is simply random(6) + 1.
+
+Here is the wireframe for the game view:
+
+
+   -----------------------------------------------------------------------------
+   |                                                                            |
+   |                                                                            |
+   |                            Game with Joey                                  |
+   |                                                                            |
+   |                                                                            |
+   |                        -------------------                                 |
+   |                        |  Rich  |  Joey   |                                |
+   |                        -------------------                                 |
+   |                        |  300   |  1,000  |                                |
+   |                        -------------------                                 |
+   |                                                                            |
+   |            Turn score: 200                                                 |
+   |                                                                            |
+   |                                                                            |
+   |            Throw:  3    3    2    4    2   Score: 100                      |
+   |                                                                            |
+   |                                                                            |
+   |                 ----------               ----------                        |
+   |                 | Roll   |               |  Pass  |                        |
+   |                 ----------               ----------                        |
+   -----------------------------------------------------------------------------
+
+
+or
+
+
+	-----------------------------------------------------------------------------
+	|                                                                            |
+	|                                                                            |
+	|                            Game with Joey                                  |
+	|                                                                            |
+	|                                                                            |
+	|                        -------------------                                 |
+	|                        |  Rich  |  Joey   |                                |
+	|                        -------------------                                 |
+	|                        |  300   |  1,000  |                                |
+	|                        -------------------                                 |
+	|                                                                            |
+	|            Turn score: 200                                                 |
+	|                                                                            |
+	|                                                                            |
+	|            Throw:  2    2    4    4    6   Score: 0                        |
+	|                                                                            |
+	|                                                                            |
+	|                                ----------                                  |
+	|                                | Oh well |                                 |
+	|                                ----------                                  |
+	-----------------------------------------------------------------------------
+
+
+
