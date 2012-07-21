@@ -32,10 +32,10 @@
 		<% end %>
 	<% end %>
 <% else %>
-	<% if game.player_score(opponent) > Game::WinningScore && ! game.game_over? && game.my_turn?(current_player) %>
+	<% if game.player_score(opponent) >= Game::WinningScore && ! game.game_over? && game.my_turn?(current_player) %>
 		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, you have one more chance."%>
 	<% end %>
-	<% if game.player_score(current_player) > Game::WinningScore && ! game.game_over? && game.my_turn?(opponent) %>
+	<% if game.player_score(current_player) >= Game::WinningScore && ! game.game_over? && game.my_turn?(opponent) %>
 		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, he/she has one more chance."%>
 	<% end %>
 
