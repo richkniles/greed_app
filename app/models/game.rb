@@ -25,7 +25,7 @@ class Game < ActiveRecord::Base
   
   def game_over?
     return true if score(1) >= WinningScore && score(2) < score(1) && 
-                                  turns(1).count == turns(2).count &&
+                                  turns(1).count > turns(2).count &&
                                   turns(1).last.rolls.count == 0
       
     return true if score(2) >= WinningScore && score(1) < score(2) && 

@@ -16,7 +16,7 @@ class PlayersController < ApplicationController
     if @player.save
       sign_in @player
       flash[:success] = "Welcome to Greed!"
-      redirect_to @player
+      redirect_to '/players'
     else
       render 'new'
     end

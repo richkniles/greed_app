@@ -3,17 +3,21 @@
 
 <div class = "container">
 <h1>Currently Active Players</h1>
-
-<h2>Click on someone to play Greed!</h2>
-<ul class='players'>
-	<% @players.each do |player| %>
-		<li>
-			<%= form_tag new_game_path, method: 'get' do  %>
-				<%= hidden_field_tag :opponent, player.id %>
-				<%= image_submit_tag gravatar_url_for(player), id: player.player_name %>
-				<%= player.player_name %>
+	<% if @players.any? %>
+		<h2>Click on someone to play Greed!</h2>
+		<ul class='players'>
+			<% @players.each do |player| %>
+				<li>
+					<%= form_tag new_game_path, method: 'get' do  %>
+						<%= hidden_field_tag :opponent, player.id %>
+						<%= image_submit_tag gravatar_url_for(player), id: player.player_name %>
+						<%= player.player_name %>
+					<% end %>
+				</li>
 			<% end %>
-		</li>
+		</ul>
+	<% else %>
+		<h2>No one else is signed into Greed at this time.</h2>
+		<%= link_to "Refresh", '/players', class: "btn btn-large btn-primary" %>
 	<% end %>
-</ul>
 </div>
