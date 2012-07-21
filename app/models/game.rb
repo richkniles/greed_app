@@ -21,16 +21,87 @@ class Game < ActiveRecord::Base
   WAITING = 3
   ABANDONED = 4
   
-  def score
-    0
+  WinningScore = 3000
+  
+  def game_over?
+    return true if score(1) >= WinningScore && score(2) < score(1) && 
+                                  turns(1).count == turns(2).count &&
+                                  turns(1).last.rolls.count == 0
+      
+    return true if score(2) >= WinningScore && score(1) < score(2) && 
+                                  turns(1).count == turns(2).count &&
+                                  turns(2).last.rolls.count == 0
+    return false
+  end
+  
+  def score(which_player)
+    player_turns = turns(which_player)
+    in_the_game = false
+    player_turns.reduce(0) do |score,turn|
+      if (in_the_game || turn.score >= 300)
+        in_the_game = true
+        score + turn.score
+      else
+        score
+      end
+    end
   end
   
   def roll
-    
+    case state
+    when PLAYER1_TURN
+      player1_turns.last.roll
+    when PLAYER2_TURN
+      player2_turns.last.roll
+    end
   end
   
-  def pass
-    
+  def next_turn
+    case state
+    when PLAYER1_TURN
+      self.state = PLAYER2_TURN
+      player2_turns.create
+    else
+      self.state = PLAYER1_TURN
+      player1_turns.create
+    end
+    save
+  end
+  
+  def turns(which_player)
+    case which_player
+    when 1
+      player1_turns
+    when 2
+      player2_turns
+    else
+      nil
+    end
+  end
+  
+  def opponent(current_player)
+    if player1 == current_player.id
+      Player.find(player2)
+    else
+      Player.find(player1)
+    end
+  end
+  
+  def my_turn? (current_player)
+    which_player = current_player.id == player1 ? 1 : 2
+    return which_player == state
+  end
+  
+  def which_player_num(player)
+    player.id == player1 ? 1 : 2
+  end
+  
+  def player_score(player)
+    score which_player_num(player)
+  end
+  
+  def player_turns(player)
+    turns which_player_num(player)
   end
   
   private

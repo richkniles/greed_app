@@ -28,7 +28,7 @@ describe MessagesController do
         it "should remove the message on the first get" do
           get 'index'
           get 'index'
-          response.body.should have_content("nil")
+          response.body.should have_content("null")
         end
       end
       

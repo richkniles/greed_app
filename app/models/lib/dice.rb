@@ -24,6 +24,10 @@ class Dice < Set
     scoring_sets.reduce(Dice.new) { |memo,s| memo.merge(s) }
   end
   
+  def non_scoring_dice
+    self.clone.subtract scoring_dice
+  end
+  
   def score_as_same_set
     v = first.value
     n = count
@@ -31,8 +35,8 @@ class Dice < Set
     when 1,2
       case v
         when 1 
-          100
-        when 5 then 50
+          100*n
+        when 5 then 50*n
         else 0
       end
     when 3..6
@@ -41,7 +45,9 @@ class Dice < Set
       case v
         when 1 then 1000*mult
         when 2..6 then v*100*mult
+        else 0
       end
+    else 0
     end 
   end
   

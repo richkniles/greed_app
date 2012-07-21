@@ -126,8 +126,12 @@ describe Roll do
         r.roll
         r_next = r.progress_to_next_roll
         scoring_dice = r.scoring_dice
-        next_roll_dice = r_next.dice.values
-        (scoring_dice.concat next_roll_dice).sort.should == r.dice.values.sort
+         next_roll_dice = r_next.dice.values
+         if (scoring_dice.count < 6)
+           (scoring_dice.concat next_roll_dice).sort.should == r.dice.values.sort
+         else
+           next_roll_dice.count.should == 6
+         end
       end
     end
   end

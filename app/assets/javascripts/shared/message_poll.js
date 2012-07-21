@@ -1,15 +1,25 @@
 
-var intID = self.setInterval("check_for_messages()",5000);
+var intID = self.setInterval("check_for_messages()",1000);
+var calls_since_last_message = 0;
+var current_time_interval = 5000;
 
 function check_for_messages()
 {
 	$.ajax({
 		url: '/messages',
 		complete: processMessage,
-		//data: { player_id: 99 } // this works, so should remap the routes to standard REST ones
-								// and use the data: construct to pass what part of the REST
-								// action we want.  
 	});
+	calls_since_last_message++;
+	// slow it down to 5 sec after a minute of nothing
+	if (calls_since_last_message * current_time_interval / 60000 > 1)
+	{
+		self.clearInterval(intID);
+		current_time_interval = 5000;
+		intID = self.setInterval("check_for_messages()",current_time_interval);	
+	}
+	// after ten minutes of nothing shut it down
+	if (calls_since_last_message * current_time_interval / 60000 > 10) 
+		self.clearInterval(intID);
 }
 function processMessage(data)
 {
@@ -18,6 +28,8 @@ function processMessage(data)
 
 	if (m != null)
 	{
+		calls_since_last_message = 0;
+
 		self.clearInterval(intID);
 		
 		var fr_id = m.from_player;
@@ -49,13 +61,14 @@ function processMessage(data)
 		else if (message == "Update")
 		{
 			self.location.reload(true);
+			current_time_interval = 1000;
 		}
 		else
 		{
 			alert(message);
 			self.location.reload(true);
 		}
-		intID = self.setInterval("check_for_messages()", 5000)
+		intID = self.setInterval("check_for_messages()", current_time_interval);
 	}		
 }
 
@@ -81,11 +94,12 @@ function createGameWith(player)
 		},
 		async: false,
 		complete: function(data) {
-			log(data.responseText);
+			log("in createGameWith got response: " + data.responseText);
 			var g = eval("(" + data.responseText + ")");
 			game_id = g.id;
 		}
 	});
+	current_time_interval = 1000; // speed up response when playing
 	return game_id;
 }
 function log(msg) {

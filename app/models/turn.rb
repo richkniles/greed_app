@@ -10,8 +10,15 @@ class Turn < ActiveRecord::Base
   end
   
   def roll
-    r = rolls.create
+    if rolls.any?
+      r = rolls.last.progress_to_next_roll
+    else
+      r = self.rolls.create
+      r.init
+    end
     r.roll
+    r.save
+    reload 
   end
   
 end

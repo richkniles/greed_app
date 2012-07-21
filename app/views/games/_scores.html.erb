@@ -1,0 +1,14 @@
+<table class='scores'>
+	<tr>
+		<td><%= "Your Score"%></td>
+		<td><%= "#{opponent.player_name}'s Score"%></td>
+	</tr>
+	<tr>
+		<% my_score = game.player_score(current_player) %>
+		<% his_score = game.player_score(opponent) %>
+		<% my_score_class = (my_score > his_score) ? "winner-so-far" : "looser-so-far"%>
+		<% his_score_class = (his_score > my_score) ? "winner-so-far" : "looser-so-far"%>
+		<td class='<%= my_score_class %>'><%= my_score %></td>
+		<td class='<%= his_score_class %>'><%= his_score %></td>
+	</tr>
+</table>

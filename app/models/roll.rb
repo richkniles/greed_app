@@ -24,25 +24,31 @@ class Roll < ActiveRecord::Base
     
   def roll
     init if dice_string.nil?
-    dice_array = dice
-    dice_array = dice.each_with_index.map do |die, i| 
-      (scoring_dice.include? i) ? die : rand(6)+1 
+    dice_array = []
+    dice.count.times do
+      dice_array << (rand(6) + 1)
     end
-    self.dice_string = dice_array.join ' '
-    @scoring_triples = @scoring_singles = @dice = nil
-    @score = -1
+    init dice_array
   end
   
   def progress_to_next_roll
     next_dice = dice.clone
     next_dice.subtract(dice.scoring_dice)
-    next_roll = Roll.new 
-    next_roll.init (next_dice.map { |d| d.value })
+    next_roll = Roll.create(turn_id: self.turn_id) 
+    if next_dice.count > 0
+      next_roll.init (next_dice.values)
+    else
+      next_roll.init []
+    end
     next_roll
   end
     
   def scoring_dice
     dice.scoring_dice.map { |d| d.value }
+  end
+  
+  def non_scoring_dice
+    dice.non_scoring_dice.map { |d| d.value }
   end
   
   def scoring_indices

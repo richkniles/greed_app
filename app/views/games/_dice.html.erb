@@ -1,0 +1,42 @@
+<table class='dice', border="1">
+	<tr>
+		<% if roll.nil? %>
+			<td></td><td></td><td></td><td></td><td></td><td></td>
+		<% else %>
+			<% @roll.dice.each do |die| %>
+				<% td_class = (roll.scoring_indices.include? die.index) ? "scoring" : "non-scoring" %>
+				<td class='<%= td_class %>'><%= die.value %></td> 
+			<% end %>
+		<% end %>
+	</tr>
+</table>    
+<% if !roll.nil? %>
+	<h3> <%="This roll: #{roll.score} This turn: #{turn_score}" %></h3>
+	<% if game.player_score(current_player) < 300 %>
+		<h3>You need 300 points in one turn to enter the game."</h3>
+	<% end %>
+	<% if roll.scoring_dice.count == roll.dice.count %>
+		<% if game.my_turn? current_player %>
+			<% all_six_message = "All dice scored! You get to roll all six!"%>
+		<% else %>
+			<% all_six_message = "All dice scored. #{opponent.player_name} gets to roll all 6." %>
+		<% end %>
+		<h3><%= all_six_message %></h3>
+	<% else %>
+		<% if roll.score > 0 %>
+			<% if roll.non_scoring_dice.count > 1%>
+				<%= "roll #{roll.non_scoring_dice.join ', '}?"%>
+			<% else %>
+				<%= "roll just the #{roll.non_scoring_dice.join ', '}?"%>
+			<% end %>
+		<% end %>
+	<% end %>
+<% else %>
+	<% if game.player_score(opponent) > Game::WinningScore && ! game.game_over? && game.my_turn?(current_player) %>
+		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, you have one more chance."%>
+	<% end %>
+	<% if game.player_score(current_player) > Game::WinningScore && ! game.game_over? && game.my_turn?(opponent) %>
+		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, he/she has one more chance."%>
+	<% end %>
+
+<% end %>

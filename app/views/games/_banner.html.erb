@@ -1,0 +1,14 @@
+<h1><%= "Game with #{opponent.player_name}" %></h1>
+<% if game.state == Game::ABANDONED %>
+	<div class='abandoned'>
+		Abandoned
+	</div>
+<% else %>
+	<% if ! game.game_over? %>
+		<% if game.my_turn? current_player %>
+			<h2>It's your turn</h2>
+		<% else %>
+			<h2><%= "#{opponent.player_name} is rolling..."%></h2>
+		<% end %>	
+	<% end %>	
+<% end %>

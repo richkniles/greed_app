@@ -50,17 +50,16 @@ module SessionsHelper
     end
   end
   
-  def current_game=(game)
-    logger.debug "3333>>>>    setting current game to #{game.inspect}"
-    session[:game] = game
+  def current_game_id=(id)
+    session[:game_id] = id
   end
   
-  def current_game
-    session[:game]
+  def current_game_id
+    session[:game_id]
   end
   
   def playing?
-    session[:game] if signed_in?
+    session[:game_id] if signed_in?
   end
   
   def current_opponent

@@ -12,9 +12,10 @@ class GamesController < ApplicationController
   
   def create
     player2_id = params[:game] ? params[:game][:player2] : params[:player2]
-    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::PLAYER1_TURN)
+    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING)
     @opponent_name = Player.find(@game.player2).player_name
     if (@game.save)
+      @game.next_turn
       render json: @game
       #   this didn't work:  why???
       # respond_to  do |format|
@@ -27,6 +28,18 @@ class GamesController < ApplicationController
   end
   
   def update
+    to_do = params[:move]
+    current_game = Game.find(params[:id])
+    if to_do == "roll"
+      logger.debug("doing roll on game #{current_game.id}")
+      current_game.roll
+      logger.debug("did roll")
+    else
+      current_game.next_turn
+    end
+    opponent = current_game.opponent(current_player)
+    current_player.send_message_to opponent, "Update"
+    redirect_to "/games/#{current_game.id}"
   end
 
   def index
@@ -37,14 +50,24 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    if (@game.state == Game::ABANDONED)
-      self.current_game = nil
-    else
-      self.current_game = @game
+    player1 = Player.find(@game.player1)
+    player2 = Player.find(@game.player2)
+    @opponent = player1.id == current_player.id ? player2 : player1
+    @turn_score = 0
+    turns = @game.turns(@game.state)
+    @rolls = turns.last.rolls
+    if (!turns.nil? && turns.any? && turns.last.rolls.any?)
+      @turn_score = turns.last.score
+      @roll_score = turns.last.rolls.last.score
+      @roll = @rolls.last
     end
-    @player1 = Player.find(@game.player1)
-    @player2 = Player.find(@game.player2)
-    @opponent = @player1.id == current_player.id ? @player2.player_name : @player1.player_name
+    if @game.game_over?
+      if @game.player_score(current_player) > @game.player_score(@opponent)
+        @winner = current_player
+      else
+        @winner = @opponent
+      end
+    end
   end
 
   def destroy

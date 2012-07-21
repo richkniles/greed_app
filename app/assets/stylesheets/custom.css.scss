@@ -40,6 +40,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
 	font-size: 3em;
 	letter-spacing: -2px;
+	margin-top: 10px;
 	margin-bottom: 5px;
 	text-align: center;
 }
@@ -68,7 +69,7 @@ p {
 	margin-top: 0px;
 	margin-bottom: 10px;
 	font-size: 2em;
-	color: #00f;
+	color: #0ff;
 	letter-spacing: -1px;
 	padding-top: 9px;
 	font-weight: bold;
@@ -202,4 +203,69 @@ input, textarea, select, .uneditable-input {
 	color: #f00;
 	font-size: 5em;
 	text-align: center;
+}
+
+.scores {
+	font-size: 1.5em;
+	font-weight: bold;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	td {
+		width: 150px;
+	}
+	background: #166;
+	color: #fff;
+}
+
+.play-buttons {
+	margin-top: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	td {
+		width: 150px;
+	}
+}
+.dice {
+	height: 50px;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 5em;
+	font-weight: bold;
+	border: 1px;
+	td {
+		width: 50px;
+		height: 50px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		padding: 4px 4px 4px 4px;
+		background: #166;
+	}
+}
+.non-scoring {
+	color: #faa;
+}
+.scoring {
+	color: #0ff;
+}
+.winner-so-far {
+	color: #0ff;
+}
+.looser-so-far {
+	color: #faa;
+}
+.raspberry {
+	color: #faa;
+	text-decoration: blink;
+}
+.winner {
+	color: #0ff;
+	font-size: 4em;
+}
+.loser {
+	color: #faa;
+	font-size: 2em;
 }

@@ -1,7 +1,19 @@
 <% provide(:title, "Game with #{@opponent}")%>
-<h1><%= "Game with #{@opponent}" %></h1>
-<% if @game.state == Game::ABANDONED %>
-	<div class='abandoned'>
-		Abandoned
+<div class = 'container'>
+	<div class = 'center'>
+		
+		<%= render 'banner', game: @game, opponent: @opponent %>
+		
+		<%= render 'scores', opponent: @opponent, current_player: @current_player, game: @game %>
+					
+		<%= render 'dice', roll: @roll, turn_score: @turn_score, opponent: @opponent, game: @game, current_player: @current_player %>
+
+		<% if ! @game.game_over? %>
+			<%= render 'play_buttons', game: @game, rolls: @rolls %>
+		<% else %>
+			<%= render 'winner', current_player: @current_player, opponent: @opponent, winner: @winner %>
+		<% end %>
+
+
 	</div>
-<% end %>
+</div>

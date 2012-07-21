@@ -69,7 +69,7 @@ Here is the wireframe for the game view:
    |            Turn score: 200                                                 |
    |                                                                            |
    |                                                                            |
-   |            Throw:  3    3    2    4    2   Score: 100                      |
+   |            Your roll:  3    3    2    4    2   Score: 100                  |
    |                                                                            |
    |                                                                            |
    |                 ----------               ----------                        |
@@ -96,7 +96,7 @@ or
 	|            Turn score: 200                                                 |
 	|                                                                            |
 	|                                                                            |
-	|            Throw:  2    2    4    4    6   Score: 0                        |
+	|            Your roll:  2    2    4    4    6   Score: 0                    |
 	|                                                                            |
 	|                                                                            |
 	|                                ----------                                  |
@@ -105,4 +105,33 @@ or
 	-----------------------------------------------------------------------------
 
 
+   -----------------------------------------------------------------------------
+   |                                                                            |
+   |                                                                            |
+   |                            Game with Joey                                  |
+   |                                                                            |
+   |                                                                            |
+   |                        -------------------                                 |
+   |                        |  Rich  |  Joey   |                                |
+   |                        -------------------                                 |
+   |                        |  300   |  1,000  |                                |
+   |                        -------------------                                 |
+   |                                                                            |
+   |            Turn score: 200                                                 |
+   |                                                                            |
+   |                                                                            |
+   |            Joey's roll:  3    3    2    4    2   Score: 100                |
+   |                                                                            |
+   |                                                                            |
+   |                                                                            |
+   |                                                                            |
+   |                                                                            |
+   -----------------------------------------------------------------------------
 
+
+
+How to determine if the game is over:
+The first player scoring over 3000 starts the playoff.  The other player has one turn to try to beat the score.  If he/she does, play continues until one player fails to beat the winning score.
+
+player 1 is always first.  So if he is ahead, and player 2 has the same number of turns, player 1 has won
+player 2 is always second.  So if he is ahead, and player 1 has more turns, player 2 has won

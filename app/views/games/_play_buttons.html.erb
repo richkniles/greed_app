@@ -1,0 +1,30 @@
+<% if game.my_turn? @current_player %>
+	<div class='play-buttons'>
+		<% if !rolls.any? || rolls.last.score > 0 %>
+			<table class = 'play-buttons'>
+				<tr>
+					<td>
+						<%= form_for(game) do |f| %>
+							<input type='hidden' name='move' value='roll'>
+							<%= f.submit "Roll", class: "btn btn-large btn-primary" %>
+						<% end %>
+					</td>
+					<td>
+						<%= form_for(game) do |f| %>
+							<input type='hidden' name='move' value='pass'>
+							<%= f.submit "Pass", class: "btn btn-large btn-primary" %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		<% else %>
+				<h3 class='raspberry'>Sorry, you rolled zero! You loose your turn.</h3>
+				<%= form_for(game) do |f| %>
+					<input type='hidden' name='move' value='pass'>
+					<%= f.submit "Oh well", class: "btn btn-large btn-primary" %>
+				<% end %>
+		<% end %>
+				
+		</div>
+	</div>
+<% end %>
