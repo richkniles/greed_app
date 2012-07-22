@@ -31,9 +31,7 @@ class GamesController < ApplicationController
     to_do = params[:move]
     current_game = Game.find(params[:id])
     if to_do == "roll"
-      logger.debug("doing roll on game #{current_game.id}")
       current_game.roll
-      logger.debug("did roll")
     else
       current_game.next_turn
     end

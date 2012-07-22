@@ -33,10 +33,18 @@
 	<% end %>
 <% else %>
 	<% if game.player_score(opponent) >= Game::WinningScore && ! game.game_over? && game.my_turn?(current_player) %>
-		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, you have one more chance."%>
+		<% if game.player_score(current_player) < 3000 %>
+			<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, you have another chance."%>
+		<% else %>
+			<p>It's a playoff!</p>
+		<% end %>
 	<% end %>
 	<% if game.player_score(current_player) >= Game::WinningScore && ! game.game_over? && game.my_turn?(opponent) %>
-		<p><%= "#{opponent.player_name}'s score is over #{Game::WinningScore}, he/she has one more chance."%>
+		<% if game.player_score(opponent) < 3000 %>
+			<p><%= "Your score is over #{Game::WinningScore}, #{opponent.player_name} has another chance."%>
+		<% else %>
+			<p>It's a playoff!</p>
+		<% end %>
 	<% end %>
 
 <% end %>
