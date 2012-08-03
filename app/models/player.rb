@@ -1,3 +1,6 @@
+require 'pusher'
+
+
 class Player < ActiveRecord::Base
   attr_accessible :player_name, :email, :password, :password_confirmation
   has_secure_password
@@ -17,14 +20,26 @@ class Player < ActiveRecord::Base
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
 
-
-
+  include PusherKeys
+  
   def send_message_to(player, message, params = {})
     
     message = "Play Greed with #{self.player_name}?" if message == "ask"
     message += " #{params[:game_id]}" if message == "join"
+
+    message_packet = {
+                        fr_id: self.id.to_s, 
+                        to_id: player.id.to_s, 
+                        message: message
+                      }.to_json
+        
+    Pusher.app_id = PusherKeys::APP_ID
+    Pusher.key = PusherKeys::APP_KEY
+    Pusher.secret = PusherKeys::APP_SECRET
+
+    Pusher[player.player_name].trigger('game-action', {:message => message_packet})
     
-    Message.create(from_player: self.id, to_player: player.id, message: message)
+   # Message.create(from_player: self.id, to_player: player.id, message: message)
   end
   
   

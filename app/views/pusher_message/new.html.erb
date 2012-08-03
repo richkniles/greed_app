@@ -1,0 +1,9 @@
+<h1>Message</h1>
+<%= form_tag('/pusher_message') do %>
+
+	<%= text_field_tag 'message' %>
+	
+	<%= submit_tag "send", remote: true %>
+	
+<% end %>
+

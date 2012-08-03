@@ -1,39 +1,27 @@
-
-var intID = self.setInterval("check_for_messages()",1000);
-var calls_since_last_message = 0;
-var current_time_interval = 5000;
-
-function check_for_messages()
-{
-	$.ajax({
-		url: '/messages',
-		complete: processMessage,
-	});
-	calls_since_last_message++;
-	// slow it down to 5 sec after a minute of nothing
-	if (calls_since_last_message * current_time_interval / 60000 > 1)
-	{
-		self.clearInterval(intID);
-		current_time_interval = 5000;
-		intID = self.setInterval("check_for_messages()",current_time_interval);	
+$(function(){
+	if (currentPlayerName != "") {
+		var pusher = new Pusher('c4a44690c15cabded2bc'); // Replace with your app key
+		var channel = pusher.subscribe(currentPlayerName());
+		channel.bind('game-action', function(data) {
+		  processMessage(data.message);
+		});
 	}
-	// after ten minutes of nothing shut it down
-	if (calls_since_last_message * current_time_interval / 60000 > 10) 
-		self.clearInterval(intID);
+});
+
+function currentPlayerName() {
+	return $('#current-player-name').text();
 }
 function processMessage(data)
 {
-	//alert(JSON.stringify(data.responseText));
-	var m = eval("(" + data.responseText + ")");
-
+	var m = eval("(" + data + ")");
 	if (m != null)
 	{
 		calls_since_last_message = 0;
 
-		self.clearInterval(intID);
+		//self.clearInterval(intID);
 		
-		var fr_id = m.from_player;
-		var to_id = m.to_player;
+		var fr_id = m.fr_id;
+		var to_id = m.to_id;
 		var message = m.message;
 		log("recieved message " + message + " from player " + fr_id + " to player " + to_id);
 		
@@ -68,14 +56,14 @@ function processMessage(data)
 			alert(message);
 			self.location.reload(true);
 		}
-		intID = self.setInterval("check_for_messages()", current_time_interval);
+		//intID = self.setInterval("check_for_messages()", current_time_interval);
 	}		
 }
 
 function replyTo(id, message)
 {
 	$.ajax(	{ 	
-		url: '/messages',
+		url: '/pusher_message',
      	type: 'POST',
 		async: false,
      	data: { 
@@ -107,4 +95,26 @@ function log(msg) {
         throw new Error(msg);
     }, 0);
 }
+// var intID = self.setInterval("check_for_messages()",1000);
+// var calls_since_last_message = 0;
+// var current_time_interval = 5000;
+// 
+// function check_for_messages()
+// {
+// 	$.ajax({
+// 		url: '/messages',
+// 		complete: processMessage,
+// 	});
+// 	calls_since_last_message++;
+// 	// slow it down to 5 sec after a minute of nothing
+// 	if (calls_since_last_message * current_time_interval / 60000 > 1)
+// 	{
+// 		self.clearInterval(intID);
+// 		current_time_interval = 5000;
+// 		intID = self.setInterval("check_for_messages()",current_time_interval);	
+// 	}
+// 	// after ten minutes of nothing shut it down
+// 	if (calls_since_last_message * current_time_interval / 60000 > 10) 
+// 		self.clearInterval(intID);
+// }
 

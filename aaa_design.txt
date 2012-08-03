@@ -133,5 +133,11 @@ or
 How to determine if the game is over:
 The first player scoring over 3000 starts the playoff.  The other player has one turn to try to beat the score.  If he/she does, play continues until one player fails to beat the winning score.
 
-player 1 is always first.  So if he is ahead, and player 2 has the same number of turns, player 1 has won
-player 2 is always second.  So if he is ahead, and player 1 has more turns, player 2 has won
+player 1 is always first.  So if he is ahead, and player 2 has the same number of turns, player 1 has won, but not until the end of player 2's turn.  So player 1 has won if player 1 has MORE turns, but his last turn has no rolls.
+
+player 2 is always second.  So if he is ahead, and and has the same number of turns as player 1, and also his last turn has no rolls, then player 1 has completed his try at winning and failed.
+
+
+Playing against the computer.  It would be cool to have a computer player thread that uses an API.  Maybe that could be done using javascript.  The javascript would be running on the player's computer, but issuing requests to the server for its moves.
+
+Limiting a player to one game at a time.  This could be done by stopping listening for new games until a game is over.

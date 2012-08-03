@@ -17,13 +17,6 @@ class GamesController < ApplicationController
     if (@game.save)
       @game.next_turn
       render json: @game
-      #   this didn't work:  why???
-      # respond_to  do |format|
-      #   format.html { redirect_to @game }
-      #   format.js { render json: @game.id }
-      # end
-    #else
-    #   do something to recover
     end
   end
   

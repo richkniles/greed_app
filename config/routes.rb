@@ -1,5 +1,7 @@
 GreedApp::Application.routes.draw do
 
+  resources :pusher_message, only: [:new, :create]
+
   resources :players
   resources :sessions, only: [:new, :create, :destroy]
   resources :games
