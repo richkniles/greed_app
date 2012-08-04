@@ -4,6 +4,8 @@ class GamesController < ApplicationController
   
   include PusherKeys
   
+  skip_before_filter :tweek_current_player
+  
   before_filter :must_be_signed_in
   
   def new 

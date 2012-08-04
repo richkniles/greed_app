@@ -43,11 +43,11 @@ describe "Player pages" do
           expect { click_button submit }.to change(Player, :count).by(1)
         end
         
-        describe "after saving the player" do
+        describe "after saving the player it should go to players list" do
           before { click_button submit }
           let(:player) { Player.find_by_email('user@example.com') }
 
-          it { should have_selector('title', text: player.player_name) }
+          it { should have_selector('title', text: "Currently Active Players") }
           it { should have_selector('div.alert.alert-success', text: 'Welcome') }
           it { should have_link('Sign out') }
           

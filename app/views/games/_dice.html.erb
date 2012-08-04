@@ -13,7 +13,7 @@
 <% if !roll.nil? %>
 	<h3> <%="This roll: #{roll.score} This turn: #{turn_score}" %></h3>
 	<% if game.player_score(current_player) < 300 %>
-		<h3>You need 300 points in one turn to enter the game."</h3>
+		<h3>You need 300 points in one turn to enter the game.</h3>
 	<% end %>
 	<% if roll.scoring_dice.count == roll.dice.count %>
 		<% if game.my_turn? current_player %>
