@@ -1,5 +1,5 @@
 $(function(){
-	if (currentPlayerName != "") {
+	if (currentPlayerName() != "") {
 		var pusher = new Pusher('c4a44690c15cabded2bc'); // Replace with your app key
 		var channel = pusher.subscribe(currentPlayerName());
 		channel.bind('game-action', function(data) {
@@ -7,9 +7,17 @@ $(function(){
 		});
 	}
 });
-
 function currentPlayerName() {
 	return $('#current-player-name').text();
+}
+function gameID()
+{
+	if ($('#game-id').length > 0) {
+		return $('#game-id').text();
+	}
+	else {
+		return nil;
+	}
 }
 function processMessage(data)
 {
@@ -48,15 +56,23 @@ function processMessage(data)
 		}
 		else if (message == "Update")
 		{
-			self.location.reload(true);
-			current_time_interval = 1000;
+			//self.location.reload(true);
+			// instead, do an ajax call to game/show/id which will render using a show.js.erb
+	
+			$.ajax( { 
+						url: '/games/' + gameID(),
+						data: { partial: true },
+						success:function(result) {
+						    $("#game-state").html(result);
+						}
+			 		}
+				  );
 		}
 		else
 		{
 			alert(message);
 			self.location.reload(true);
 		}
-		//intID = self.setInterval("check_for_messages()", current_time_interval);
 	}		
 }
 
@@ -87,7 +103,6 @@ function createGameWith(player)
 			game_id = g.id;
 		}
 	});
-	current_time_interval = 1000; // speed up response when playing
 	return game_id;
 }
 function log(msg) {
@@ -95,26 +110,3 @@ function log(msg) {
         throw new Error(msg);
     }, 0);
 }
-// var intID = self.setInterval("check_for_messages()",1000);
-// var calls_since_last_message = 0;
-// var current_time_interval = 5000;
-// 
-// function check_for_messages()
-// {
-// 	$.ajax({
-// 		url: '/messages',
-// 		complete: processMessage,
-// 	});
-// 	calls_since_last_message++;
-// 	// slow it down to 5 sec after a minute of nothing
-// 	if (calls_since_last_message * current_time_interval / 60000 > 1)
-// 	{
-// 		self.clearInterval(intID);
-// 		current_time_interval = 5000;
-// 		intID = self.setInterval("check_for_messages()",current_time_interval);	
-// 	}
-// 	// after ten minutes of nothing shut it down
-// 	if (calls_since_last_message * current_time_interval / 60000 > 10) 
-// 		self.clearInterval(intID);
-// }
-

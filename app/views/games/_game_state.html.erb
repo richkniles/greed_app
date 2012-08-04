@@ -1,0 +1,23 @@
+<%= render 'banner', game: @game, opponent: @opponent %>
+
+<%= render 'scores', opponent: @opponent, current_player: @current_player, game: @game %>
+		
+<%= render 'dice', roll: @roll, turn_score: @turn_score, 
+				opponent: @opponent, game: @game, current_player: @current_player %>
+
+<% if ! @game.game_over? %>
+
+	<%= render 'play_buttons', game: @game, rolls: @rolls %>
+
+<% else %>
+
+	<%= render 'winner', current_player: @current_player, opponent: @opponent, winner: @winner %>
+
+	<% if @winner == @current_player %>
+		<%= form_tag new_game_path, method: 'get' do  %>
+			<%= hidden_field_tag :opponent, @opponent.id %>
+			<%= submit_tag "Play again?", id: @opponent.player_name %>
+		<% end %>
+	<% end %>
+
+<% end %>

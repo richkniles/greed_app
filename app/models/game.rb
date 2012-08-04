@@ -1,6 +1,6 @@
 class Game < ActiveRecord::Base
   
-  attr_accessible :player1, :player2, :state
+  attr_accessible :player1, :player2, :state, :ready
   
   validates :player1, presence: true
   validates :player2, presence: true  
@@ -14,6 +14,8 @@ class Game < ActiveRecord::Base
               class_name: :Turn, 
               conditions: [ 'which_player=?', 2 ],
               before_add: :set_which_player_to_2
+
+
   
   # states
   PLAYER1_TURN = 1
@@ -112,6 +114,5 @@ class Game < ActiveRecord::Base
     def set_which_player_to_2(turn)
       turn.which_player = 2
     end
-    
       
 end

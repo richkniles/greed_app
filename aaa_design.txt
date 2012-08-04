@@ -141,3 +141,30 @@ player 2 is always second.  So if he is ahead, and and has the same number of tu
 Playing against the computer.  It would be cool to have a computer player thread that uses an API.  Maybe that could be done using javascript.  The javascript would be running on the player's computer, but issuing requests to the server for its moves.
 
 Limiting a player to one game at a time.  This could be done by stopping listening for new games until a game is over.
+
+
+Re-doing the messages to use pusher
+
+Problem occurs when the Update message is sent, and the resulting page load is slow.  The other player doesn't know this, and so might roll again while the opponent's page is still loading, and isn't connected to the pusher channel.  In this case the second Update message is lost, and the opponent's page doesn't update.
+
+To fix this problem it is required to not present the roll button until the opponent's page is loaded. 
+
+So could hide the roll button on page load, and add something to the $(function()) that hits a controller action which triggers a message to the player who's turn it is to unhide their roll button.
+
+E.g. add a ready action to the games controller.  
+
+The ready action would send an unhide message to the player_name it is passed.
+
+The $(function()) (ready handler) would hit the ready action passing the opponent's player_name
+
+Is there an infinite loop problem?  No, but the unhide message should be ignored if there isn't a roll button.
+
+None of this works!  Because exactly the same thing can happen in reverse.  The ready message is missed if the reload of my page happens after my opponents reload and ready message.
+
+This can be fixed if we show the buttons if a ready was already sent.  We can update the game, maybe to say the buttons should show.
+
+Or, rendering the game show view for the player who's turn it is should wait until the other player's show view has said it's ready. I.e. if it's my turn, my view controller sleeps until the opponent's ready action has been hit.  Hitting the ready action doesn't send another pusher message, it only sets the game state to indicate to my controller it should render.
+
+This doesn't work either!  You can't delay in the controller, because Rails processes one request at a time.  So waiting for the ready flag to be set will never happen, because the ready action isn't processed while waiting on another action.
+
+It seems the only solution to this whole problem is to not use reload, because reload disconnects the connection to pusher and can cause potentially missed messages while it's disconnected.  Instead, use javascript to update the view.

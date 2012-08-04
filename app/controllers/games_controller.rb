@@ -1,5 +1,8 @@
+require 'pusher'
 
 class GamesController < ApplicationController
+  
+  include PusherKeys
   
   before_filter :must_be_signed_in
   
@@ -12,7 +15,7 @@ class GamesController < ApplicationController
   
   def create
     player2_id = params[:game] ? params[:game][:player2] : params[:player2]
-    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING)
+    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING, ready: true)
     @opponent_name = Player.find(@game.player2).player_name
     if (@game.save)
       @game.next_turn
@@ -41,6 +44,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+      
     player1 = Player.find(@game.player1)
     player2 = Player.find(@game.player2)
     @opponent = player1.id == current_player.id ? player2 : player1
@@ -59,8 +63,12 @@ class GamesController < ApplicationController
         @winner = @opponent
       end
     end
+    
+    if params[:partial]
+      logger.debug("********** rendering partial")
+      render partial: 'game_state'
+    end
+    
   end
 
-  def destroy
-  end
 end
