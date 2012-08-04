@@ -15,4 +15,4 @@
 /tmp
 
 # Ignore the pusher key file
-#/app/helpers/pusher_keys.rb
+/app/helpers/pusher_keys.rb
