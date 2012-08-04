@@ -15,7 +15,7 @@ class GamesController < ApplicationController
   
   def create
     player2_id = params[:game] ? params[:game][:player2] : params[:player2]
-    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING, ready: true)
+    @game = Game.new(player1: current_player.id, player2: player2_id, state: Game::WAITING)
     @opponent_name = Player.find(@game.player2).player_name
     if (@game.save)
       @game.next_turn
